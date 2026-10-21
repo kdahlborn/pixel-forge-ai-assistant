@@ -1,0 +1,40 @@
+.loading {
+    display: flex;
+    gap: 0.25rem;
+    align-items: flex-end;
+
+    .loading__text {
+        color: var(--color-text-muted);
+        opacity: 0.8;
+    }
+
+    .loading__dot {
+        width: 4px;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        background-color: var(--color-text-muted);
+        margin-bottom: 3px;
+        animation: loading-dot 1.2s infinite;
+    }
+
+    .loading__dot:nth-of-type(2) {
+        animation-delay: 0.2s;
+    }
+
+    .loading__dot:nth-of-type(3) {
+        animation-delay: 0.4s;
+    }
+}
+
+@keyframes loading-dot {
+    0%,
+    60%,
+    100% {
+        opacity: 0.2;
+    }
+
+    30% {
+        opacity: 1;
+        transform: translateY(-1px);
+    }
+}

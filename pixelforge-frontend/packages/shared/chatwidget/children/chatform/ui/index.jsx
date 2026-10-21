@@ -1,8 +1,16 @@
 import { useRef } from 'react';
 import './index.css';
+import { useEffect } from 'react';
 
-export const ChatForm = () => {
+export const ChatForm = ({ getAnswer }) => {
     const inputRef = useRef();
+
+    // Sätter focus på input-fältet när chatten öppnas
+    useEffect(() => {
+        if (inputRef.current) {
+            inputRef.current.focus();
+        }
+    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -10,6 +18,7 @@ export const ChatForm = () => {
         inputRef.current.value = '';
 
         console.log('USER INPUT', userInput);
+        getAnswer(userInput);
     };
 
     return (

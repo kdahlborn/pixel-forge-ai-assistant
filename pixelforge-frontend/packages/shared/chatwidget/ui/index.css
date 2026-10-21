@@ -28,6 +28,14 @@
         transform: scale(1.05);
     }
 
+    .button--chat-open {
+        width: 2.5rem;
+
+        svg {
+            font-size: 10rem;
+        }
+    }
+
     .icon:hover {
         transform: none;
     }
