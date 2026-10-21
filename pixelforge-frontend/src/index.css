@@ -1,71 +1,71 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Space+Grotesk:wght@300..700&display=swap');
 
 :root {
-    --color-bg: #0B0D12;
+    --color-bg: #0b0d12;
     --color-surface: #151821;
-    --color-elevated: #1D212C;
+    --color-elevated: #1d212c;
 
-    --color-brand: #7C3AED;
-    --color-brand-dark: #6D28D9;
-    --color-brand-light: #A78BFA;
+    --color-brand: #7c3aed;
+    --color-brand-dark: #6d28d9;
+    --color-brand-light: #a78bfa;
 
-    --color-cyan: #22D3EE;
-    --color-success: #22C55E;
-    --color-warning: #F59E0B;
+    --color-cyan: #22d3ee;
+    --color-success: #22c55e;
+    --color-warning: #f59e0b;
 
-    --color-pf-border: #2A2F3A;
-    --color-border-light: #343A46;
+    --color-pf-border: #2a2f3a;
+    --color-border-light: #343a46;
 
-    --color-text-primary: #F5F7FA;
-    --color-text-secondary: #9CA3AF;
-    --color-text-muted: #AEB6C4;
+    --color-text-primary: #f5f7fa;
+    --color-text-secondary: #9ca3af;
+    --color-text-muted: #aeb6c4;
 
     --font-heading: 'Space Grotesk', sans-serif;
     --font-body: 'Inter', sans-serif;
 }
 
 * {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  scrollbar-width: thin;
-  scrollbar-color: #2A2F3A transparent;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    scrollbar-width: thin;
+    scrollbar-color: #2a2f3a transparent;
 }
 
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+    width: 5px;
+    height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+    background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #2A2F3A;
-  border-radius: 3px;
+    background-color: #2a2f3a;
+    border-radius: 3px;
 }
 
 html {
-  background-color: #0B0D12;
+    background-color: #0b0d12;
 }
 
 body {
-  background-color: #0B0D12;
-  color: #F5F7FA;
-  font-family: 'Inter', sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  min-height: 100vh;
+    background-color: #0b0d12;
+    color: #f5f7fa;
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
 }
 
 .wrapper {
-  max-width: 1100px;
-  margin: 0 auto;
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
 @media screen and (max-width: 1150px) {
-  .wrapper {
-    padding: 2rem;
-  }
+    .wrapper {
+        padding: 2rem;
+    }
 }
