@@ -4,7 +4,7 @@ import 'dotenv/config';
 import chatRoutes from './src/routes/chat.route.js';
 
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 8081;
 
 // Middlewares
 app.use(cors());
