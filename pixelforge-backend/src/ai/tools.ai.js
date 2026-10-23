@@ -2,7 +2,7 @@ import { tool } from '@langchain/core/tools';
 import { z } from 'zod';
 import { searchProducts } from '../services/product.service.js';
 
-export const getProducts = tool(
+const getProducts = tool(
     async ({ query }) => {
         const result = await searchProducts(query);
 
@@ -25,3 +25,5 @@ export const getProducts = tool(
         }),
     },
 );
+
+export const tools = [getProducts];
