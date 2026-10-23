@@ -4,24 +4,21 @@ import { searchProducts } from '../services/product.service.js';
 
 const getProducts = tool(
     async ({ query }) => {
-        const result = await searchProducts(query);
+        const products = await searchProducts(query);
 
-        if (!result || result.length === 0) {
-            return 'Inga produkter hittades för den angivna sökningen';
-        }
-
-        return JSON.stringify(result);
+        return JSON.stringify(products);
     },
     {
         name: 'get_products',
         description:
-            'Använd detta verktyg för att söka i PixelForges produktsortiment efter priser, lagerstatus, betyg, kategorier och varumärken.',
+            'Sök efter relevanta produkter i PixelForges sortiment. ' +
+            'Använd verktyget när användaren frågar om produkter, priser, ' +
+            'specifikationer, kategorier, varumärken eller lagerstatus. ' +
+            'Skicka en kort sökfråga som beskriver produkten eller dess egenskaper.',
         schema: z.object({
             query: z
                 .string()
-                .describe(
-                    'Sökord eller kategori, t.ex. "Gaming PCs", "Nexus Pro", "Bestseller" eller "PixelForge"',
-                ),
+                .describe('Sökord för att hitta relevanta produkter.'),
         }),
     },
 );

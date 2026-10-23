@@ -18,19 +18,23 @@ export const fetchProducts = async () => {
     return cachedProducts;
 };
 
-// Anpassad sökfunktion för ditt productTool
+// Anpassad filtrering för getProducts
 export const searchProducts = async (query) => {
     const products = await fetchProducts();
+
     const searchTerm = query.toLowerCase().trim();
 
     return products.filter((product) => {
-        const nameMatch = product.name?.toLowerCase().includes(searchTerm);
-        const categoryMatch = product.category
-            ?.toLowerCase()
-            .includes(searchTerm);
-        const brandMatch = product.brand?.toLowerCase().includes(searchTerm);
-        const badgeMatch = product.badge?.toLowerCase().includes(searchTerm);
+        const searchableText = [
+            product.name,
+            product.category,
+            product.brand,
+            product.badge,
+        ]
+            .filter(Boolean)
+            .join(' ')
+            .toLowerCase();
 
-        return nameMatch || categoryMatch || brandMatch || badgeMatch;
+        return searchableText.includes(searchTerm);
     });
 };

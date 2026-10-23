@@ -16,9 +16,9 @@ export const invokeAssistant = async (question, history) => {
     // Gör det första anropet till LLM:en för att se om den vill svara direkt eller använda ett verktyg
     const response = await llmWithTools.invoke(messages);
 
-    // Om modellen inte begärde några verktygsanrop, returnera svaret direkt till användaren
-    if (!response.tool_calls?.length) {
-        console.log('Modellen svarar utan verktyg');
+    // Om modellen inte gör några verktygsanrop, returnera svaret direkt
+    if (!response.tool_calls || response.tool_calls.length === 0) {
+        console.log('Modellen svarar direkt utan verktyg');
         return response;
     }
 
