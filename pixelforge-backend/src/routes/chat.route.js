@@ -1,6 +1,5 @@
 import { Router } from 'express';
-import { answerPromp } from '../ai/prompts.ai.js';
-import { llm } from '../config/ollama.config.js';
+import { invokeAssistant } from '../ai/assistant.ai.js';
 
 const router = Router();
 
@@ -8,12 +7,7 @@ router.post('/', async (req, res) => {
     const { question, history = [] } = req.body;
     console.log('QUESTION:', question);
 
-    const chain = answerPromp.pipe(llm);
-
-    const answer = await chain.invoke({
-        history,
-        question,
-    });
+    const answer = await invokeAssistant(question, history);
 
     res.json({ answer: answer.content });
 });

@@ -17,7 +17,6 @@ export const ChatForm = ({ getAnswer }) => {
         const userInput = inputRef.current.value;
         inputRef.current.value = '';
 
-        console.log('USER INPUT', userInput);
         getAnswer(userInput);
     };
 

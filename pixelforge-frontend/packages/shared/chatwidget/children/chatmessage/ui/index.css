@@ -2,6 +2,7 @@
     color: var(--color-text-primary);
 }
 .message--user {
+    max-width: 70%;
     align-self: flex-end;
     background-color: var(--color-brand);
     padding: 1rem;
