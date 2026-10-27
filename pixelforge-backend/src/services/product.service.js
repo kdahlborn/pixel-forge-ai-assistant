@@ -19,22 +19,52 @@ export const fetchProducts = async () => {
 };
 
 // Anpassad filtrering för getProducts
-export const searchProducts = async (query) => {
+// export const searchProducts = async (query) => {
+//     const products = await fetchProducts();
+
+//     const searchTerm = query.toLowerCase().trim();
+
+//     return products.filter((product) => {
+//         const searchableText = [
+//             product.name,
+//             product.category,
+//             product.brand,
+//             product.badge,
+//         ]
+//             .filter(Boolean)
+//             .join(' ')
+//             .toLowerCase();
+
+//         return searchableText.includes(searchTerm);
+//     });
+// };
+
+export const searchProducts = async (query = '') => {
     const products = await fetchProducts();
 
-    const searchTerm = query.toLowerCase().trim();
+    const cleanQuery = (query || '').toLowerCase().trim();
 
-    return products.filter((product) => {
+    // Om sökfrågan är tom, returnera alla produkter direkt
+    if (!cleanQuery) return products;
+
+    // Dela upp söktermen i enskilda ord (t.ex. ["amd", "ryzen"])
+    const queryWords = cleanQuery.split(/\s+/);
+
+    const filtered = products.filter((product) => {
         const searchableText = [
             product.name,
             product.category,
             product.brand,
             product.badge,
+            product.description,
         ]
             .filter(Boolean)
             .join(' ')
             .toLowerCase();
 
-        return searchableText.includes(searchTerm);
+        // Alla ord i sökfrågan måste finnas med i texten (i valfri ordning)
+        return queryWords.every((word) => searchableText.includes(word));
     });
+
+    return filtered;
 };

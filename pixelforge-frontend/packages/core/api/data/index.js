@@ -45,7 +45,7 @@ export const askQuestion = async ({ question, history }) => {
 
         const data = await response.json();
 
-        return data.answer;
+        return data;
     } catch (error) {
         throw new Error(error.message);
     }
