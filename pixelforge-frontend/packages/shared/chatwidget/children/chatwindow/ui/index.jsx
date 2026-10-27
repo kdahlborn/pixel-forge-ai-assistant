@@ -21,7 +21,12 @@ export const ChatWindow = ({ onClose }) => {
         const role = message.getType() === 'human' ? 'user' : 'assistant';
 
         return (
-            <ChatMessage key={index} content={message.content} role={role} />
+            <ChatMessage
+                key={index}
+                content={message.content}
+                role={role}
+                documents={message.documents || []}
+            />
         );
     });
 

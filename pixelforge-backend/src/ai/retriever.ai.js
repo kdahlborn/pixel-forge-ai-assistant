@@ -10,7 +10,18 @@ export const retrieveDocuments = async (question) => {
         match_count: 3,
     });
 
-    console.log('DATA:', data);
+    // console.log('DATA:', data);
+    console.log(
+        'DOCUMENT METADATA:',
+        JSON.stringify(
+            data.map((document) => ({
+                id: document.id,
+                metadata: document.metadata,
+            })),
+            null,
+            2,
+        ),
+    );
 
     if (error) {
         console.log('ERROR:', error);

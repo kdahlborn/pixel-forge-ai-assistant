@@ -8,7 +8,8 @@ export const useChat = () => {
         const chatHistory = JSON.parse(localStorage.getItem('messages')) || [
             {
                 role: 'assistant',
-                content: 'Hi! How can I help you?',
+                content: 'Hej! Hur kan jag hjälpa dig?',
+                documents: [],
             },
         ];
 
@@ -17,7 +18,9 @@ export const useChat = () => {
                 return new HumanMessage(message.content);
             }
 
-            return new AIMessage(message.content);
+            const aiMessage = new AIMessage(message.content);
+            aiMessage.documents = message.documents || [];
+            return aiMessage;
         });
     });
     const [isLoading, setIsLoading] = useState(false);
@@ -28,6 +31,7 @@ export const useChat = () => {
         const chatHistory = messages.map((message) => ({
             role: message?.getType() === 'human' ? 'user' : 'assistant',
             content: message.content,
+            documents: message.documents || [],
         }));
 
         localStorage.setItem('messages', JSON.stringify(chatHistory));
@@ -48,12 +52,17 @@ export const useChat = () => {
                 content: message.content,
             }));
 
-            const answer = await askQuestion({
+            const response = await askQuestion({
                 question,
                 history: chatHistory,
             });
 
-            const aiMessage = new AIMessage(answer);
+            // console.log('RESPONSE:', response);
+
+            const aiMessage = new AIMessage(response.answer);
+
+            // Spara dokumentlänkarna på meddelandet
+            aiMessage.documents = response.documents ?? [];
 
             setMessages([...history, aiMessage]);
         } catch (error) {
@@ -64,7 +73,9 @@ export const useChat = () => {
     };
 
     const clearHistory = () => {
-        setMessages([new AIMessage('Hi! How can I help you?')]);
+        const initialMessage = new AIMessage('Hej! Hur kan jag hjälpa dig?');
+        initialMessage.documents = [];
+        setMessages([initialMessage]);
     };
 
     return {
