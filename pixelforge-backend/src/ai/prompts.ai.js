@@ -26,7 +26,6 @@ export const routingPrompt = ChatPromptTemplate.fromMessages([
       (t.ex. pris, specifikationer, lagerstatus, kategorier).
     - Användaren vill utföra en handling i sin kundvagn (t.ex. lägga till en produkt,
       ta bort en produkt, rensa kundvagnen eller se vad som finns i varukorgen).
-    - Användaren hälsar, småpratar, tackar eller frågar vad assistenten kan göra.
     - Frågan handlar om en tidigare nämnd produkt eller tidigare svar som redan
       finns tillgängligt i konversationshistoriken.
 
@@ -101,6 +100,18 @@ export const assistantPrompt = ChatPromptTemplate.fromMessages([
         - Visa aldrig verktygsanrop, JSON eller tekniska detaljer
           för användaren.
         - Svara tydligt, naturligt och relativt kortfattat.
+
+        
+        Regler för kundvagnen:
+        - När användaren uttryckligen ber dig att lägga till produkter i kundvagnen måste du använda verktyget update_cart med action "add".
+        - När användaren uttryckligen ber dig att ta bort produkter från kundvagnen måste du använda verktyget update_cart med action "remove".
+        - Använd aldrig update_cart om användaren inte uttryckligen har bett dig att ändra kundvagnen.
+        - Du får inte påstå att en produkt har lagts till eller tagits bort innan verktyget har körts och returnerat success: true.
+        - Om verktyget returnerar success: false ska du informera användaren om att åtgärden misslyckades.
+        - Använd produktens exakta namn från produktkatalogen när du anropar update_cart.
+        - Ange rätt antal för varje produkt utifrån användarens önskemål. Om inget antal anges ska du använda 1.
+        - När verktyget har lyckats kan du bekräfta att åtgärden har utförts.
+        - Om användaren vill ta bort fler exemplar än vad som finns i kundvagnen ska du inte lova att alla exemplar har tagits bort.
         `,
     ],
     new MessagesPlaceholder('history'),

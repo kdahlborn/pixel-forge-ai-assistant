@@ -17,6 +17,7 @@ router.post('/', async (req, res) => {
 
     let answer = '';
     let documents = [];
+    let cart = [];
 
     if (route === 'rag') {
         const response = await chain.invoke({ history, question });
@@ -25,12 +26,14 @@ router.post('/', async (req, res) => {
     } else {
         const response = await invokeAssistant(question, history);
         answer = response.content;
+        cart = response.cartActions;
     }
 
-    console.log('ANSWER:', answer);
-    console.log('DOCUMENT LINKS:', documents);
+    // console.log('ANSWER:', answer);
+    // console.log('DOCUMENT LINKS:', documents);
+    // console.log('CART:', JSON.stringify(cart, null, 2));
 
-    res.json({ answer, documents });
+    res.json({ answer, documents, cart });
 });
 
 export default router;

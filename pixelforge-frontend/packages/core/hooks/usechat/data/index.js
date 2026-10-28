@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { HumanMessage, AIMessage } from '@langchain/core/messages';
 import { askQuestion } from '@pixelforge/api';
+import { useCartStore } from '@pixelforge/useCartStore';
 
 export const useChat = () => {
     // messages innehåller det vi hämtar från localStorage
@@ -25,6 +26,8 @@ export const useChat = () => {
     });
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(false);
+    const addToCart = useCartStore((state) => state.addToCart);
+    const removeFromCart = useCartStore((state) => state.removeFromCart);
 
     // useEffect uppdaterar localStorage när nya meddelanden läggs till
     useEffect(() => {
@@ -57,14 +60,30 @@ export const useChat = () => {
                 history: chatHistory,
             });
 
-            // console.log('RESPONSE:', response);
-
             const aiMessage = new AIMessage(response.answer);
 
             // Spara dokumentlänkarna på meddelandet
             aiMessage.documents = response.documents ?? [];
 
             setMessages([...history, aiMessage]);
+
+            if (response.cart?.length) {
+                response.cart.forEach((cartAction) => {
+                    if (cartAction.action === 'add') {
+                        cartAction.items.forEach((item) => {
+                            for (let i = 0; i < item.qty; i++) {
+                                addToCart(item);
+                            }
+                        });
+                    } else if (cartAction.action === 'remove') {
+                        cartAction.items.forEach((item) => {
+                            for (let i = 0; i < item.qty; i++) {
+                                removeFromCart(item.id);
+                            }
+                        });
+                    }
+                });
+            }
         } catch (error) {
             setError(error.message);
         } finally {
