@@ -7,47 +7,74 @@ import { assistantPrompt } from './prompts.ai.js';
 const llmWithTools = llm.bindTools(tools);
 
 export const invokeAssistant = async (question, history) => {
-    // Formatera system-prompten tillsammans med historik och den nya frågan
+    // Formatera system-prompten, historiken och den nya frågan
     const messages = await assistantPrompt.formatMessages({
         question,
         history,
     });
 
-    // Gör det första anropet till LLM:en för att se om den vill svara direkt eller använda ett verktyg
-    const response = await llmWithTools.invoke(messages);
+    // Spara eventuella varukorgsåtgärder
+    const cartActions = [];
 
-    // Om modellen inte gör några verktygsanrop, returnera svaret direkt
-    if (!response.tool_calls || response.tool_calls.length === 0) {
-        console.log('Modellen svarar direkt utan verktyg');
-        return response;
-    }
+    // Låt modellen använda verktyg i flera omgångar
+    for (let i = 0; i < 5; i++) {
+        // Anropa modellen
+        const response = await llmWithTools.invoke(messages);
 
-    // Array för att samla alla resultat från utförda verktyg
-    const toolMessages = [];
+        console.log('CONTENT:', response.content);
+        console.log('TOOL CALLS:', response.tool_calls);
 
-    // Iterera igenom alla verktygsanrop som modellen begärde
-    for (const toolCall of response.tool_calls) {
-        // Hitta det matchande verktyget i vår verktygslista baserat på namnet
-        const selectedTool = tools.find((tool) => tool.name === toolCall.name);
+        // Spara modellens svar och eventuella verktygsanrop i konversationen
+        messages.push(response);
 
-        if (!selectedTool) {
-            throw new Error(`Unkown tool: ${toolCall.name}`);
+        // Om modellen inte vill använda något verktyg
+        if (!response.tool_calls?.length) {
+            console.log('Modellen svarar utan att använda verktyg');
+
+            return {
+                content: response.content,
+                cartActions,
+            };
         }
 
-        console.log('SELECTED TOOL:', selectedTool.name);
+        // Kör verktygen som modellen har valt
+        for (const toolCall of response.tool_calls) {
+            // Hitta rätt verktyg
+            const selectedTool = tools.find(
+                (tool) => tool.name === toolCall.name,
+            );
 
-        const result = await selectedTool.invoke(toolCall.args);
+            if (!selectedTool) {
+                throw new Error(`Verktyget ${toolCall.name} hittades inte.`);
+            }
 
-        // Paketera resultatet i ett ToolMessage så att modellen förstår källan till datan
-        toolMessages.push(
-            new ToolMessage({
-                content: result,
-                tool_call_id: toolCall.id,
-            }),
-        );
+            // Kör verktyget med argumenten från modellen
+            const result = await selectedTool.invoke(toolCall.args);
+            console.log('TOOL RESULT:', result);
+
+            // Spara varukorgsåtgärder
+            if (toolCall.name === 'update_cart') {
+                const data =
+                    typeof result === 'string' ? JSON.parse(result) : result;
+
+                if (data.success) {
+                    cartActions.push({
+                        action: data.action,
+                        items: data.items,
+                    });
+                }
+            }
+
+            // Skicka verktygsresultatet tillbaka till modellen
+            messages.push(
+                new ToolMessage({
+                    content:
+                        typeof result === 'string'
+                            ? result
+                            : JSON.stringify(result),
+                    tool_call_id: toolCall.id,
+                }),
+            );
+        }
     }
-
-    // Skicka tillbaka hela kontexten (ursprungliga meddelanden + modellens verktygsbegäran + verktygens resultat)
-    // till modellen så att den kan generera ett slutgiltigt svar till användaren
-    return await llmWithTools.invoke([...messages, response, ...toolMessages]);
 };
