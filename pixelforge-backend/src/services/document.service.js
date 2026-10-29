@@ -44,7 +44,6 @@ export const getDocumentLinks = async (documents) => {
             return {
                 id,
                 title,
-                slug,
                 url: `/support/${slug}`,
             };
         })

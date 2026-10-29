@@ -26,7 +26,7 @@ export const ChatForm = ({ getAnswer }) => {
                 type="text"
                 className="chat__input"
                 ref={inputRef}
-                placeholder="Ask me anything..."
+                placeholder="Fråga mig något..."
             />
         </form>
     );

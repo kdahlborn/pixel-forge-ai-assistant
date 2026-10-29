@@ -29,10 +29,6 @@ router.post('/', async (req, res) => {
         cart = response.cartActions;
     }
 
-    // console.log('ANSWER:', answer);
-    // console.log('DOCUMENT LINKS:', documents);
-    // console.log('CART:', JSON.stringify(cart, null, 2));
-
     res.json({ answer, documents, cart });
 });
 

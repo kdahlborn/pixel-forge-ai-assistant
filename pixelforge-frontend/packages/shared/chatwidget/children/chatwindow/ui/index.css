@@ -24,5 +24,10 @@
             gap: 1rem;
             padding: 1rem;
         }
+
+        .button--clear {
+            padding: 0.25rem;
+            font-weight: 400;
+        }
     }
 }
