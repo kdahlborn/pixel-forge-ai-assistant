@@ -5,6 +5,7 @@ import { useChat } from '@pixelforge/usechat';
 import { ChatMessage } from '@pixelforge/chatmessage';
 import { Loading } from '@pixelforge/loading';
 import { useEffect, useRef } from 'react';
+import { Button } from '@pixelforge/button';
 
 export const ChatWindow = ({ onClose }) => {
     const { messages, getAnswer, isLoading, error, clearHistory } = useChat();
@@ -41,7 +42,8 @@ export const ChatWindow = ({ onClose }) => {
                 </section>
 
                 <ChatForm getAnswer={getAnswer} />
-                <button onClick={clearHistory}>clear</button>
+
+                <Button onClick={clearHistory} text="clear" type="clear" />
             </section>
         </aside>
     );
