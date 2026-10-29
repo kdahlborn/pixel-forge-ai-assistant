@@ -29,8 +29,6 @@ export const invokeAssistant = async (question, history) => {
 
         // Om modellen inte vill använda något verktyg
         if (!response.tool_calls?.length) {
-            console.log('Modellen svarar utan att använda verktyg');
-
             return {
                 content: response.content,
                 cartActions,

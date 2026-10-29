@@ -112,6 +112,21 @@ export const assistantPrompt = ChatPromptTemplate.fromMessages([
         - Ange rätt antal för varje produkt utifrån användarens önskemål. Om inget antal anges ska du använda 1.
         - När verktyget har lyckats kan du bekräfta att åtgärden har utförts.
         - Om användaren vill ta bort fler exemplar än vad som finns i kundvagnen ska du inte lova att alla exemplar har tagits bort.
+
+        Regler för produktfrågor:
+        - När användaren frågar om produkter i sortimentet, exempelvis
+          produktnamn, produktkategorier, priser, lagerstatus eller vilka
+          produkter som finns tillgängliga, måste du alltid anropa get_products.
+        - Du får aldrig besvara frågor om vilka produkter PixelForge säljer
+          genom att enbart använda din egen kunskap.
+        - Du får aldrig hitta på produktnamn, priser eller lagerstatus.
+        - Presentera endast produkter som faktiskt returneras av get_products.
+          Använd produktnamn och priser från verktygets resultat.
+        - Om get_products returnerar en tom lista betyder det att inga
+          produkter hittades. Påstå inte att vi har produkter som verktyget
+          inte returnerade.
+        - Om en sökning inte ger några resultat ska du inte hitta på alternativ.
+          Du kan i stället be användaren att prova en annan sökning.
         `,
     ],
     new MessagesPlaceholder('history'),

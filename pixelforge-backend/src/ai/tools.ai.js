@@ -10,10 +10,22 @@ const getProducts = tool(
     {
         name: 'get_products',
         description: `
-            Sök efter relevanta produkter i PixelForges sortiment. 
-            Använd verktyget när användaren frågar om produkter, priser, specifikationer eller kategorigrupper.
-            Viktigt: Skicka endast korta engelska sökord (t.ex. "Graphics Cards", "Processors", "Keyboards", "AMD", "MSI"). 
-            Inkludera aldrig ord som "i lager" eller "har ni".
+            Sök efter produkter som faktiskt finns i PixelForges produktkatalog.
+
+            Du MÅSTE använda verktyget när användaren frågar om produkter,
+            produktkategorier, priser, specifikationer, märken eller lagerstatus.
+
+            Exempel:
+            - "Har ni Razer-tangentbord?" -> query: "Razer Keyboards"
+            - "Vilka moderkort har ni?" -> query: "Motherboards"
+            - "Har ni produkter under 3000 kr?" -> sök efter relevant kategori
+              och filtrera resultaten efter pris.
+
+            Använd korta engelska sökord. Inkludera inte prisgränser,
+            lagerstatus eller andra villkor i sökfrågan.
+            Sådana villkor ska hanteras utifrån verktygets resultat.
+
+            Hitta aldrig på produkter eller produktinformation.
         `,
         schema: z.object({
             query: z
@@ -70,7 +82,10 @@ const updateCart = tool(
             
             Välj action "add" när användaren vill lägga till produkter. 
             Välj action "remove" när användaren vill ta bort produkter. 
-            Skicka varje produkt med dess exakta namn från produktkatalogen och önskat antal exemplar.
+            Använd exakt produktnamn från resultatet av get_products.
+            Kopiera namnet från fältet "name" utan att lägga till varumärke,
+            tillverkare eller annan text. Om produktens namn är "Ryzen 9 7950X"
+            ska productName vara exakt "Ryzen 9 7950X", inte "AMD Ryzen 9 7950X".
         `,
         schema: z.object({
             action: z
@@ -78,23 +93,36 @@ const updateCart = tool(
                 .describe(
                     'add för att lägga till produkter, remove för att ta bort produkter',
                 ),
-            items: z
-                .array(
-                    z.object({
-                        productName: z
-                            .string()
-                            .describe(
-                                'Produktens exakta namn i produktkatalogen',
-                            ),
-                        qty: z.coerce
-                            .number()
-                            .int()
-                            .positive()
-                            .default(1)
-                            .describe('Antal exemplar av produkten'),
-                    }),
-                )
-                .min(1),
+            items: z.preprocess(
+                (value) => {
+                    if (typeof value === 'string') {
+                        try {
+                            return JSON.parse(value);
+                        } catch {
+                            return value;
+                        }
+                    }
+
+                    return value;
+                },
+                z
+                    .array(
+                        z.object({
+                            productName: z
+                                .string()
+                                .describe(
+                                    'Produktens exakta namn i produktkatalogen',
+                                ),
+                            qty: z.coerce
+                                .number()
+                                .int()
+                                .positive()
+                                .default(1)
+                                .describe('Antal exemplar av produkten'),
+                        }),
+                    )
+                    .min(1),
+            ),
         }),
     },
 );
