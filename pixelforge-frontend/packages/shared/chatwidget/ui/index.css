@@ -1,0 +1,42 @@
+.chat-widget {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 1;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+
+    .button--chat {
+        padding: 0;
+        border: none;
+        background-color: var(--color-brand);
+        width: 4rem;
+        aspect-ratio: 1;
+        border-radius: 50%;
+
+        display: grid;
+        place-content: center;
+        align-self: flex-end;
+
+        transition: all 0.3s ease;
+    }
+
+    .button--chat:hover {
+        background-color: var(--color-brand-dark);
+        transform: scale(1.05);
+    }
+
+    .button--chat-open {
+        width: 2.5rem;
+
+        svg {
+            font-size: 10rem;
+        }
+    }
+
+    .icon:hover {
+        transform: none;
+    }
+}

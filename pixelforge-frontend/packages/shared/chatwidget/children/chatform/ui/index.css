@@ -1,0 +1,21 @@
+.chat__form {
+    margin-top: auto;
+    background-color: var(--color-surface);
+    padding: 0.5rem 1rem;
+
+    .chat__input {
+        width: 100%;
+        background-color: var(--color-elevated);
+        border: none;
+        border-radius: 2rem;
+        padding: 0.5rem 0.75rem;
+
+        color: var(--color-text-primary);
+        letter-spacing: 0.5px;
+    }
+
+    .chat__input:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgb(151, 136, 238);
+    }
+}
