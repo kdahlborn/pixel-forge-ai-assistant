@@ -15,7 +15,7 @@ En AI-assistent för PixelForge, en fiktiv e-handel med tekniska produkter. Assi
 Innan du startar projektet behöver du:
 
 - Node.js och npm.
-- Ollama installerat med de modeller som anges i projektets konfiguration.
+- Ollama med en språkmodell som stöder tools samt en embeddingmodell.
 - Ett Supabase-projekt med nödvändiga tabeller och funktioner konfigurerade.
 
 ## Installation
